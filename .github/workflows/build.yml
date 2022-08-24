@@ -1,0 +1,33 @@
+name: Java CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: "${{ runner.os }}-bmt-${{ hashFiles('**/*.gradle*') }}"
+          restore-keys: ${{ runner.os }}-bmt-
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Upload output
+        uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: build/libs/*

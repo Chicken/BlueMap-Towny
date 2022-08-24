@@ -1,0 +1,29 @@
+# BlueMap-Towny configuration
+# https://github.com/Chicken/BlueMap-Towny#config
+
+# Seconds between checks for marker updates
+update-interval: 30
+# Set by /n set mapcolor
+dynamic-nation-colors: true
+# Set by /t set mapcolor
+dynamic-town-colors: true
+# HTML for town popup, placeholders documented in README
+popup: '<span style="font-size: 120%">%name% (%nation%)</span><br><span>Mayor <strong>%mayor%</strong></span><br><span>Residents <strong>%residents%</strong></span><br><span>Bank <strong>%bank%</strong></span>'
+
+style:
+  # Y-level to put markers at
+  y-level: 62
+  # Town border settings
+  border-color: '#FF0000'
+  border-opacity: 0.8
+  border-width: 3
+  # Town fill settings
+  fill-color: '#FF0000'
+  fill-opacity: 0.35
+  # Path to icons on web or a link
+  # Town home
+  home-icon-enabled: false
+  home-icon: assets/house.png
+  # Nation capital
+  capital-icon-enabled: false
+  capital-icon: assets/king.png
