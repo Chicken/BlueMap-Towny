@@ -2,6 +2,22 @@
 
 > *[BlueMap](https://github.com/BlueMap-Minecraft/BlueMap) addon for showing your [Towny](https://github.com/TownyAdvanced/Towny) towns on your beautiful map*
 
+
+[![GitHub Total Downloads](https://img.shields.io/github/downloads/Chicken/BlueMap-Towny/total?label=Downloads&color=success "Click here to download the plugin")](https://github.com/Chicken/BlueMap-Towny/releases/latest)
+
+Configuration, placeholders and main features heavily inspired by Dynmap-Towny.  
+Has support for holes in claims and claims outside main town.  
+Does not have support for external plugins hooking into placeholders.
+
+<details>
+<summary><span style="font-size:1.5em;">Images</span></summary>
+
+![flat view of a town](.github/images/1.png)
+
+![perspective view of a town](.github/images/2.png)
+
+</details>
+
 ## Installation
 
 Put the plugin jar file inside your plugins folder and have both Towny and BlueMap installed.
