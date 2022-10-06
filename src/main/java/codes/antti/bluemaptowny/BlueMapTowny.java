@@ -220,7 +220,6 @@ public final class BlueMapTowny extends JavaPlugin {
                               .icon(this.config.getString("style.war-icon"), 8, 8)
                               .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
                               .build();
-                      town.sendMessage(Component.text("test"));
                       markers.put("towny." + townName + ".icon", iconMarker);
                   }
                     else if (this.config.getBoolean("style.capital-icon-enabled") && spawn.isPresent() && town.isCapital()) {
