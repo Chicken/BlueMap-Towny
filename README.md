@@ -54,6 +54,9 @@ style:
   # Nation capital
   capital-icon-enabled: false
   capital-icon: assets/king.png
+  # Icon during war
+  war-icon-enabled: false
+  war-icon: assets/war.png
 ```
 
 ### Popup placeholders
