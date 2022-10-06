@@ -3,7 +3,6 @@ package codes.antti.bluemaptowny;
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
-import com.palmergames.adventure.text.Component;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -214,15 +213,15 @@ public final class BlueMapTowny extends JavaPlugin {
                         seq += 1;
                     }
                     Optional<Location> spawn = Optional.ofNullable(town.getSpawnOrNull());
-                  if (this.config.getBoolean("style.war-icon-enabled") && spawn.isPresent() && town.hasActiveWar()) {
-                      POIMarker iconMarker = new POIMarker.Builder()
-                              .label(townName)
-                              .icon(this.config.getString("style.war-icon"), 8, 8)
-                              .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
-                              .build();
-                      markers.put("towny." + townName + ".icon", iconMarker);
-                  }
-                    else if (this.config.getBoolean("style.capital-icon-enabled") && spawn.isPresent() && town.isCapital()) {
+                    if (this.config.getBoolean("style.war-icon-enabled") && spawn.isPresent() && town.hasActiveWar()) {
+                        POIMarker iconMarker = new POIMarker.Builder()
+                                .label(townName)
+                                // TODO: .detail(townDetails) - not a BlueMap feature yet
+                                .icon(this.config.getString("style.war-icon"), 8, 8)
+                                .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
+                                .build();
+                        markers.put("towny." + townName + ".icon", iconMarker);
+                    } else if (this.config.getBoolean("style.capital-icon-enabled") && spawn.isPresent() && town.isCapital()) {
                         POIMarker iconMarker = new POIMarker.Builder()
                                 .label(townName)
                                 // TODO: .detail(townDetails) - not a BlueMap feature yet
