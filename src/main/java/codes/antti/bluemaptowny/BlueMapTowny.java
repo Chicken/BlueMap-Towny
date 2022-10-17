@@ -153,6 +153,8 @@ public final class BlueMapTowny extends JavaPlugin {
 
         t = t.replace("%peaceful%", town.isNeutral() ? "true" : "false");
 
+        t = t.replace("%war%", town.hasActiveWar() ? "true" : "false");
+
         List<String> flags = new ArrayList<>();
         flags.add("Has Upkeep: " + town.hasUpkeep());
         flags.add("PvP: " + town.isPVP());
@@ -166,6 +168,17 @@ public final class BlueMapTowny extends JavaPlugin {
             flags.add(ruinedString);
         }
         t = t.replace("%flags%", String.join("<br />", flags));
+
+        if(town.hasMeta("townycultures_culture")){
+            t = t.replace("%townycultures_culture%", town.getMetadata("townycultures_culture").getValue().toString());
+        }else{
+            t = t.replace("%townycultures_culture%", "");
+        }
+        if(town.hasMeta("townyresources_dailyproduction")){
+            t = t.replace("%town_resources%", town.getMetadata("townyresources_dailyproduction").getValue().toString());
+        }else{
+            t = t.replace("%town_resources%", "");
+        }
 
         return t;
     }
@@ -213,15 +226,15 @@ public final class BlueMapTowny extends JavaPlugin {
                         seq += 1;
                     }
                     Optional<Location> spawn = Optional.ofNullable(town.getSpawnOrNull());
-                    if (this.config.getBoolean("style.war-icon-enabled") && spawn.isPresent() && town.hasActiveWar()) {
-                        POIMarker iconMarker = new POIMarker.Builder()
-                                .label(townName)
-                                // TODO: .detail(townDetails) - not a BlueMap feature yet
-                                .icon(this.config.getString("style.war-icon"), 8, 8)
-                                .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
-                                .build();
-                        markers.put("towny." + townName + ".icon", iconMarker);
-                    } else if (this.config.getBoolean("style.capital-icon-enabled") && spawn.isPresent() && town.isCapital()) {
+                  if (this.config.getBoolean("style.war-icon-enabled") && spawn.isPresent() && town.hasActiveWar()) {
+                      POIMarker iconMarker = new POIMarker.Builder()
+                              .label(townName)
+                              .icon(this.config.getString("style.war-icon"), 8, 8)
+                              .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
+                              .build();
+                      markers.put("towny." + townName + ".icon", iconMarker);
+                  }
+                    else if (this.config.getBoolean("style.capital-icon-enabled") && spawn.isPresent() && town.isCapital()) {
                         POIMarker iconMarker = new POIMarker.Builder()
                                 .label(townName)
                                 // TODO: .detail(townDetails) - not a BlueMap feature yet
