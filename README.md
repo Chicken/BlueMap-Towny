@@ -61,27 +61,27 @@ style:
 
 ### Popup placeholders
 
-| Placeholder              | Content                          |
-|--------------------------|----------------------------------|
-| `%name%`                 | Town name                        |
-| `%mayor%`                | Town mayor                       |
-| `%residents%`            | Town residents                   |
-| `%assistants%`           | Town assistants                  |
-| `%residentdisplaynames%` | Town residents but display names |
-| `%residentcount%`        | Number of town residents         |
-| `%founded%`              | Town founding date               |
-| `%board%`                | Town board text                  |
-| `%trusted%`              | Town trusted residents           |
-| `%tax%`                  | Town tax                         |
-| `%bank%`                 | Town bank balance                |
-| `%nation%`               | Nation of the town               |
-| `%nationstatus%`         | Capital/Member of ...            |
-| `%public%`               | Town publicity status            |
-| `%peaceful%`             | Is the town peaceful             |
-| `%flags%`                | Flags of the town (pvp, mobs...) |
-| `%war%`                | Has active war |
-| `%townycultures_culture%` | Culture of town, see https://github.com/TownyAdvanced/TownyCultures |
-| `%town_resources%` |Resources of town, see https://github.com/TownyAdvanced/TownyResources |
+| Placeholder              | Content                                                                |
+|--------------------------|------------------------------------------------------------------------|
+| `%name%`                 | Town name                                                              |
+| `%mayor%`                | Town mayor                                                             |
+| `%residents%`            | Town residents                                                         |
+| `%assistants%`           | Town assistants                                                        |
+| `%residentdisplaynames%` | Town residents but display names                                       |
+| `%residentcount%`        | Number of town residents                                               |
+| `%founded%`              | Town founding date                                                     |
+| `%board%`                | Town board text                                                        |
+| `%trusted%`              | Town trusted residents                                                 |
+| `%tax%`                  | Town tax                                                               |
+| `%bank%`                 | Town bank balance                                                      |
+| `%nation%`               | Nation of the town                                                     |
+| `%nationstatus%`         | Capital/Member of ...                                                  |
+| `%public%`               | Town publicity status                                                  |
+| `%peaceful%`             | Is the town peaceful                                                   |
+| `%flags%`                | Flags of the town (pvp, mobs...)                                       |
+| `%war%`                  | Has active war                                                         |
+| `%town_culture%`         | Culture of town, see https://github.com/TownyAdvanced/TownyCultures    |
+| `%town_resources%`       | Resources of town, see https://github.com/TownyAdvanced/TownyResources |
 ## Building
 
 `./gradlew clean build`
