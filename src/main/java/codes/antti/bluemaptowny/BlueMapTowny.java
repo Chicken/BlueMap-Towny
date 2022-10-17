@@ -153,6 +153,8 @@ public final class BlueMapTowny extends JavaPlugin {
 
         t = t.replace("%peaceful%", town.isNeutral() ? "true" : "false");
 
+        t = t.replace("%war%", town.hasActiveWar() ? "true" : "false");
+
         List<String> flags = new ArrayList<>();
         flags.add("Has Upkeep: " + town.hasUpkeep());
         flags.add("PvP: " + town.isPVP());
@@ -166,6 +168,18 @@ public final class BlueMapTowny extends JavaPlugin {
             flags.add(ruinedString);
         }
         t = t.replace("%flags%", String.join("<br />", flags));
+
+        if (town.hasMeta("townycultures_culture")) {
+            t = t.replace("%town_culture%", Objects.requireNonNull(town.getMetadata("townycultures_culture")).getValue().toString());
+        } else {
+            t = t.replace("%town_culture%", "");
+        }
+
+        if (town.hasMeta("townyresources_dailyproduction")) {
+            t = t.replace("%town_resources%", Objects.requireNonNull(town.getMetadata("townyresources_dailyproduction")).getValue().toString());
+        } else {
+            t = t.replace("%town_resources%", "");
+        }
 
         return t;
     }
