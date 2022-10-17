@@ -79,7 +79,9 @@ style:
 | `%public%`               | Town publicity status            |
 | `%peaceful%`             | Is the town peaceful             |
 | `%flags%`                | Flags of the town (pvp, mobs...) |
-
+| `%war%`                | Has active war |
+| `%townycultures_culture%` | Culture of town, see https://github.com/TownyAdvanced/TownyCultures |
+| `%town_resources%` |Resources of town, see https://github.com/TownyAdvanced/TownyResources |
 ## Building
 
 `./gradlew clean build`
