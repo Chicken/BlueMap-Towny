@@ -65,14 +65,14 @@ public final class BlueMapTowny extends JavaPlugin {
 
         if (this.config.getBoolean("dynamic-town-colors")) {
             String hex = town.getMapColorHexCode();
-            if (hex != null) {
+            if (hex != null && hex != "") {
                 return new Color("#" + hex + opacity);
             }
         }
 
         if (this.config.getBoolean("dynamic-nation-colors")) {
             String hex = town.getNationMapColorHexCode();
-            if (hex != null) {
+            if (hex != null && hex != "") {
                 return new Color("#" + hex + opacity);
             }
         }
