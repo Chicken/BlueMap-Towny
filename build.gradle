@@ -28,7 +28,7 @@ repositories {
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
     compileOnly 'com.palmergames.bukkit.towny:towny:0.98.3.0'
-    compileOnly 'com.github.BlueMap-Minecraft:BlueMapAPI:v2.1.0'
+    compileOnly 'com.github.BlueMap-Minecraft:BlueMapAPI:v2.4.0'
 }
 
 def targetJavaVersion = 17

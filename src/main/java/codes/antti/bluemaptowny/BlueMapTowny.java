@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.markers.*;
@@ -28,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public final class BlueMapTowny extends JavaPlugin {
-    private final Map<String, MarkerSet> townMarkerSets = new ConcurrentHashMap<>();
+    private final Map<UUID, MarkerSet> townMarkerSets = new ConcurrentHashMap<>();
     private Configuration config;
 
     @Override
@@ -49,9 +50,9 @@ public final class BlueMapTowny extends JavaPlugin {
         BlueMapAPI.getInstance().ifPresent((api) -> {
             townMarkerSets.clear();
             for (World world : Bukkit.getWorlds()) {
-                api.getWorld(world.getName()).ifPresent((bmWorld) -> {
+                api.getWorld(world).ifPresent((bmWorld) -> {
                     MarkerSet set = new MarkerSet("Towns");
-                    townMarkerSets.put(world.getName(), set);
+                    townMarkerSets.put(world.getUID(), set);
                     bmWorld.getMaps().forEach((map) -> {
                         map.getMarkerSets().put("towny", set);
                     });
@@ -188,14 +189,15 @@ public final class BlueMapTowny extends JavaPlugin {
         BlueMapAPI.getInstance().ifPresent((api) -> {
             for (World world : Bukkit.getWorlds()) {
                 if (api.getWorld(world.getName()).isEmpty()) continue;
-                Map<String, Marker> markers = townMarkerSets.get(world.getName()).getMarkers();
+                Map<String, Marker> markers = townMarkerSets.get(world.getUID()).getMarkers();
                 markers.clear();
-                Objects.requireNonNull(TownyAPI.getInstance().getTownyWorld(world)).getTowns().forEach((k, town) -> {
+                TownyWorld townyworld = TownyAPI.getInstance().getTownyWorld(world);
+                TownyAPI.getInstance().getTowns().forEach((town) -> {
                     List<List<Vector2d>> borders = new ArrayList<>();
                     List<List<Vector2d>> areas = new ArrayList<>();
-                    Set<Vector2i> chunks = town.getTownBlocks().stream().map((tb) -> new Vector2i(tb.getX(), tb.getZ())).collect(Collectors.toSet());
+                    Set<Vector2i> chunks = town.getTownBlocks().stream().filter((tb) -> tb.getWorld().equals(townyworld)).map((tb) -> new Vector2i(tb.getX(), tb.getZ())).collect(Collectors.toSet());
                     MapUtils.areaToBlockPolygon(chunks, TownySettings.getTownBlockSize(), areas, borders);
-                    int layerY = this.config.getInt("style.y-level");
+                    double layerY = this.config.getDouble("style.y-level");
                     String townName = town.getName();
                     String townDetails = fillPlaceholders(this.config.getString("popup"), town);
                     int seq = 0;
@@ -227,30 +229,32 @@ public final class BlueMapTowny extends JavaPlugin {
                         seq += 1;
                     }
                     Optional<Location> spawn = Optional.ofNullable(town.getSpawnOrNull());
-                    if (this.config.getBoolean("style.war-icon-enabled") && spawn.isPresent() && town.hasActiveWar()) {
-                        POIMarker iconMarker = new POIMarker.Builder()
-                                .label(townName)
-                                // TODO: .detail(townDetails) - not a BlueMap feature yet
-                                .icon(this.config.getString("style.war-icon"), 8, 8)
-                                .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
-                                .build();
-                        markers.put("towny." + townName + ".icon", iconMarker);
-                    } else if (this.config.getBoolean("style.capital-icon-enabled") && spawn.isPresent() && town.isCapital()) {
-                        POIMarker iconMarker = new POIMarker.Builder()
-                                .label(townName)
-                                // TODO: .detail(townDetails) - not a BlueMap feature yet
-                                .icon(this.config.getString("style.capital-icon"), 8, 8)
-                                .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
-                                .build();
-                        markers.put("towny." + townName + ".icon", iconMarker);
-                    } else if (this.config.getBoolean("style.home-icon-enabled") && spawn.isPresent()) {
-                        POIMarker iconMarker = new POIMarker.Builder()
-                                .label(townName)
-                                // TODO: .detail(townDetails) - not a BlueMap feature yet
-                                .icon(this.config.getString("style.home-icon"), 8, 8)
-                                .position((int) spawn.get().getX(), layerY, (int) spawn.get().getZ())
-                                .build();
-                        markers.put("towny." + townName + ".icon", iconMarker);
+                    if (spawn.isPresent() && spawn.get().getWorld().equals(world)) {
+                        if (this.config.getBoolean("style.war-icon-enabled") && town.hasActiveWar()) {
+                            POIMarker iconMarker = new POIMarker.Builder()
+                                    .label(townName)
+                                    .detail(townDetails)
+                                    .icon(this.config.getString("style.war-icon"), 8, 8)
+                                    .position(spawn.get().getX(), layerY, spawn.get().getZ())
+                                    .build();
+                            markers.put("towny." + townName + ".icon", iconMarker);
+                        } else if (this.config.getBoolean("style.capital-icon-enabled") && town.isCapital()) {
+                            POIMarker iconMarker = new POIMarker.Builder()
+                                    .label(townName)
+                                    .detail(townDetails)
+                                    .icon(this.config.getString("style.capital-icon"), 8, 8)
+                                    .position(spawn.get().getX(), layerY, spawn.get().getZ())
+                                    .build();
+                            markers.put("towny." + townName + ".icon", iconMarker);
+                        } else if (this.config.getBoolean("style.home-icon-enabled")) {
+                            POIMarker iconMarker = new POIMarker.Builder()
+                                    .label(townName)
+                                    .detail(townDetails)
+                                    .icon(this.config.getString("style.home-icon"), 8, 8)
+                                    .position(spawn.get().getX(), layerY, spawn.get().getZ())
+                                    .build();
+                            markers.put("towny." + townName + ".icon", iconMarker);
+                        }
                     }
                 });
             }
