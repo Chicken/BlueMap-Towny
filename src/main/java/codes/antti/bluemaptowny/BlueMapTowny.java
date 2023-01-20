@@ -189,9 +189,12 @@ public final class BlueMapTowny extends JavaPlugin {
         BlueMapAPI.getInstance().ifPresent((api) -> {
             for (World world : Bukkit.getWorlds()) {
                 if (api.getWorld(world.getName()).isEmpty()) continue;
-                Map<String, Marker> markers = townMarkerSets.get(world.getUID()).getMarkers();
+                MarkerSet set = townMarkerSets.get(world.getUID());
+                if (set == null) continue;
+                Map<String, Marker> markers = set.getMarkers();
                 markers.clear();
                 TownyWorld townyworld = TownyAPI.getInstance().getTownyWorld(world);
+                if (townyworld == null) continue;
                 TownyAPI.getInstance().getTowns().forEach((town) -> {
                     List<List<Vector2d>> borders = new ArrayList<>();
                     List<List<Vector2d>> areas = new ArrayList<>();
