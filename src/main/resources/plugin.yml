@@ -3,5 +3,5 @@ description: 'BlueMap addon for showing your Towny towns on your beautiful map'
 version: '${version}'
 author: 'Antti <antti@antti.codes>'
 main: codes.antti.bluemaptowny.BlueMapTowny
-api-version: 1.18
+api-version: 1.16
 depend: [ BlueMap, Towny ]

@@ -108,7 +108,7 @@ public final class BlueMapTowny extends JavaPlugin {
 
         t = t.replace("%mayor%", town.hasMayor() ? town.getMayor().getName() : "");
 
-        String[] residents = town.getResidents().stream().map(TownyObject::getName).toList().toArray(String[]::new);
+        String[] residents = town.getResidents().stream().map(TownyObject::getName).toArray(String[]::new);
         if (residents.length > 34) {
             String[] old = residents;
             residents = new String[35 + 1];
@@ -120,8 +120,8 @@ public final class BlueMapTowny extends JavaPlugin {
         String[] residentsDisplay = town.getResidents().stream().map((r) -> {
             Player p = Bukkit.getPlayer(r.getName());
             if (p == null) return r.getFormattedName();
-            return p.displayName().toString();
-        }).toList().toArray(String[]::new);
+            return p.getDisplayName();
+        }).toArray(String[]::new);
         if (residentsDisplay.length > 34) {
             String[] old = residentsDisplay;
             residentsDisplay = new String[35 + 1];
@@ -130,7 +130,7 @@ public final class BlueMapTowny extends JavaPlugin {
         }
         t = t.replace("%residentdisplaynames%", String.join(", ", residentsDisplay));
 
-        t = t.replace("%assistants%", String.join(", ", town.getRank("assistant").stream().map(TownyObject::getName).toList().toArray(new String[0])));
+        t = t.replace("%assistants%", String.join(", ", town.getRank("assistant").stream().map(TownyObject::getName).toArray(String[]::new)));
 
         t = t.replace("%residentcount%", "" + town.getResidents().size());
 
@@ -225,7 +225,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                 .lineColor(getLineColor(town))
                                 .lineWidth(this.config.getInt("style.border-width"))
                                 .depthTestEnabled(false)
-                                .line(new Line(border.stream().map(v2 -> Vector3d.from(v2.getX(), layerY, v2.getY())).toList()))
+                                .line(new Line(border.stream().map(v2 -> Vector3d.from(v2.getX(), layerY, v2.getY())).collect(Collectors.toList())))
                                 .centerPosition()
                                 .build();
                         markers.put("towny." + townName + ".border." + seq, borderMarker);

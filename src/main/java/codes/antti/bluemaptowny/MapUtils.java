@@ -36,8 +36,8 @@ public abstract class MapUtils {
         List<List<Vector2i>> areaChunkPolygons = new ArrayList<>();
         List<List<Vector2i>> borderChunkPolygons = new ArrayList<>();
         areaToPolygons(chunks, areaChunkPolygons, borderChunkPolygons);
-        areaPolygons.addAll(areaChunkPolygons.stream().map(polygon -> polygon.stream().map(vector -> vector.mul(blockSize).toDouble()).toList()).toList());
-        borderPolygons.addAll(borderChunkPolygons.stream().map(polygon -> polygon.stream().map(vector -> vector.mul(blockSize).toDouble()).toList()).toList());
+        areaPolygons.addAll(areaChunkPolygons.stream().map(polygon -> polygon.stream().map(vector -> vector.mul(blockSize).toDouble()).collect(Collectors.toList())).collect(Collectors.toList()));
+        borderPolygons.addAll(borderChunkPolygons.stream().map(polygon -> polygon.stream().map(vector -> vector.mul(blockSize).toDouble()).collect(Collectors.toList())).collect(Collectors.toList()));
     }
 
     /**
