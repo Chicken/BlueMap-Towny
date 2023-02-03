@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
+import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.markers.*;
@@ -66,14 +68,14 @@ public final class BlueMapTowny extends JavaPlugin {
 
         if (this.config.getBoolean("dynamic-town-colors")) {
             String hex = town.getMapColorHexCode();
-            if (hex != null && hex != "") {
+            if (hex != null && !hex.equals("")) {
                 return new Color("#" + hex + opacity);
             }
         }
 
         if (this.config.getBoolean("dynamic-nation-colors")) {
             String hex = town.getNationMapColorHexCode();
-            if (hex != null && hex != "") {
+            if (hex != null && !hex.equals("")) {
                 return new Color("#" + hex + opacity);
             }
         }
@@ -185,6 +187,15 @@ public final class BlueMapTowny extends JavaPlugin {
         return t;
     }
 
+    private boolean isInSiegeWar(Town town) {
+        if (town.hasMeta("siegewar_hasSiege")) {
+            CustomDataField<?> cdf = town.getMetadata("siegewar_hasSiege");
+            if (cdf instanceof BooleanDataField)
+                return ((BooleanDataField) cdf).getValue();
+        }
+        return false;
+    }
+
     private void updateMarkers() {
         BlueMapAPI.getInstance().ifPresent((api) -> {
             for (World world : Bukkit.getWorlds()) {
@@ -233,7 +244,7 @@ public final class BlueMapTowny extends JavaPlugin {
                     }
                     Optional<Location> spawn = Optional.ofNullable(town.getSpawnOrNull());
                     if (spawn.isPresent() && spawn.get().getWorld().equals(world)) {
-                        if (this.config.getBoolean("style.war-icon-enabled") && town.hasActiveWar()) {
+                        if (this.config.getBoolean("style.war-icon-enabled") && (town.hasActiveWar() || isInSiegeWar(town))) {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
