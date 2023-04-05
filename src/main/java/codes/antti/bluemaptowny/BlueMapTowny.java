@@ -244,7 +244,15 @@ public final class BlueMapTowny extends JavaPlugin {
                     }
                     Optional<Location> spawn = Optional.ofNullable(town.getSpawnOrNull());
                     if (spawn.isPresent() && spawn.get().getWorld().equals(world)) {
-                        if (this.config.getBoolean("style.war-icon-enabled") && (town.hasActiveWar() || isInSiegeWar(town))) {
+                        if (this.config.getBoolean("style.ruined-icon-enabled") && town.isRuined()) {
+                            POIMarker iconMarker = new POIMarker.Builder()
+                                    .label(townName)
+                                    .detail(townDetails)
+                                    .icon(this.config.getString("style.ruined-icon"), 8, 8)
+                                    .position(spawn.get().getX(), layerY, spawn.get().getZ())
+                                    .build();
+                            markers.put("towny." + townName + ".icon", iconMarker);
+                        } else if (this.config.getBoolean("style.war-icon-enabled") && (town.hasActiveWar() || isInSiegeWar(town))) {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)

@@ -57,6 +57,9 @@ style:
   # Icon during war
   war-icon-enabled: false
   war-icon: assets/war.png
+  # Icon for ruined towns
+  ruined-icon-enabled: false
+  ruined-icon: assets/ruined.png
 ```
 
 ### Popup placeholders
