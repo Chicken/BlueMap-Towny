@@ -88,6 +88,8 @@ style:
 | `%town_resources%`       | Resources of town, see https://github.com/TownyAdvanced/TownyResources |
 
 SiegeWar Placeholders (https://github.com/TownyAdvanced/SiegeWar)
+| Placeholder              | Content                                                                |
+|--------------------------|------------------------------------------------------------------------|
 | `%attacker%`       | Attacking town/nation in war|
 | `%defender%`       | Defending town/nation in war|
 | `%siege_type%`       | Type of Siege (Conquest, Revolt etc)|
