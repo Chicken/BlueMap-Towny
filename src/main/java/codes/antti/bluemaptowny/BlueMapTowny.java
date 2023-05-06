@@ -3,6 +3,10 @@ package codes.antti.bluemaptowny;
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
+import com.gmail.goosius.siegewar.SiegeWarAPI;
+import com.gmail.goosius.siegewar.enums.SiegeSide;
+import com.gmail.goosius.siegewar.objects.Siege;
+import com.gmail.goosius.siegewar.settings.SiegeWarSettings;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -19,6 +23,7 @@ import de.bluecolored.bluemap.api.markers.*;
 import de.bluecolored.bluemap.api.math.Color;
 import de.bluecolored.bluemap.api.math.Line;
 import de.bluecolored.bluemap.api.math.Shape;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -184,6 +189,39 @@ public final class BlueMapTowny extends JavaPlugin {
             t = t.replace("%town_resources%", "");
         }
 
+        if(getServer().getPluginManager().isPluginEnabled("SiegeWar")) {
+            if (SiegeWarAPI.hasSiege(town)) {
+                Siege siege = SiegeWarAPI.getSiege(town).get();
+                t = t.replace("%attacker%", siege.getAttackerNameForDisplay());
+
+                t = t.replace("%defender%", siege.getDefenderNameForDisplay());
+
+                t = t.replace("%siege_type%", siege.getSiegeType().getName());
+
+                t = t.replace("%sessions_completed%", String.valueOf(siege.getNumBattleSessionsCompleted()));
+
+                t = t.replace("%sessions_total%", String.valueOf(SiegeWarSettings.getSiegeDurationBattleSessions()));
+
+                if (TownyEconomyHandler.isActive()) {
+                    t = t.replace("%war_chest%", TownyEconomyHandler.getFormattedBalance(siege.getWarChestAmount()));
+                }
+
+                t = t.replace("%banner_control%", WordUtils.capitalizeFully(siege.getBannerControllingSide().name())
+                        + (siege.getBannerControllingSide() == SiegeSide.NOBODY ? "" :  " (" + siege.getBannerControllingResidents().size() + ")"));
+
+                t = t.replace("%siege_status%", siege.getStatus().getName());
+
+                t = t.replace("%siege_balance%", siege.getSiegeBalance().toString());
+
+                t = t.replace("%battle_points_attacker%", siege.getFormattedAttackerBattlePoints());
+
+                t = t.replace("%battle_points_defender%", siege.getFormattedDefenderBattlePoints());
+
+                t = t.replace("%battle_time_left%", siege.getFormattedBattleTimeRemaining());
+
+            }
+        }
+
         return t;
     }
 
@@ -214,6 +252,7 @@ public final class BlueMapTowny extends JavaPlugin {
                     double layerY = this.config.getDouble("style.y-level");
                     String townName = town.getName();
                     String townDetails = fillPlaceholders(this.config.getString("popup"), town);
+                    String siegeDetails = fillPlaceholders(this.config.getString("popup-siege"), town);
                     int seq = 0;
                     for (List<Vector2d> area : areas) {
                         ShapeMarker chunkMarker = new ShapeMarker.Builder()
@@ -252,7 +291,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
-                        } else if (this.config.getBoolean("style.war-icon-enabled") && (town.hasActiveWar() || isInSiegeWar(town))) {
+                        } else if (this.config.getBoolean("style.war-icon-enabled") && (town.hasActiveWar())) {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
@@ -267,6 +306,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .icon(this.config.getString("style.capital-icon"), 8, 8)
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
+
                             markers.put("towny." + townName + ".icon", iconMarker);
                         } else if (this.config.getBoolean("style.home-icon-enabled")) {
                             POIMarker iconMarker = new POIMarker.Builder()
@@ -276,6 +316,23 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
+                        }
+                    }
+
+              if(getServer().getPluginManager().isPluginEnabled("SiegeWar")){
+                        if (this.config.getBoolean("style.war-icon-enabled") && isInSiegeWar(town)) {
+                            Location flagLoc = SiegeWarAPI.getSiege(town).get().getFlagLocation();
+                            POIMarker iconMarker = new POIMarker.Builder()
+                                    .label(townName)
+                                    .detail(siegeDetails)
+                                    .icon(this.config.getString("style.war-icon"), 8, 8)
+                                    .position(flagLoc.getX(), layerY, flagLoc.getZ())
+                                    .build();
+                            markers.put("siege." + townName + ".icon", iconMarker);
+                        } else {
+                            if (markers.containsKey("siege." + townName + ".icon")) {
+                                markers.remove(markers.get("siege." + townName + ".icon"));
+                            }
                         }
                     }
                 });
