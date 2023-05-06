@@ -21,11 +21,12 @@ repositories {
     }
     maven {
         name = 'jitpack'
-        url 'https://jitpack.io/'
+        url = 'https://jitpack.io/'
     }
     maven {
         name = 'dynmap'
-        url "https://repo.mikeprimm.com/" }
+        url = 'https://repo.mikeprimm.com/'
+    }
 }
 
 dependencies {
