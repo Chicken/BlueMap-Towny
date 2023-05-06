@@ -36,7 +36,8 @@ dynamic-nation-colors: true
 dynamic-town-colors: true
 # HTML for town popup, placeholders documented in README
 popup: '<span style="font-size: 120%">%name% (%nation%)</span><br><span>Mayor <strong>%mayor%</strong></span><br><span>Residents <strong>%residents%</strong></span><br><span>Bank <strong>%bank%</strong></span>'
-
+# HTML for War popup(SiegeWar Only), placeholders documented in README
+popup-siege: '<span style="font-size: 120%"><strong>Siege: %attacker% vs %defender%</strong></span><br><hr><span>Town <strong>%name%</strong></span><br><span>Type <strong>%siege_type%</strong></span><br><span>War Chest <strong>%war_chest%</strong></span><br><span>Siege Progress <strong>%sessions_completed%/%sessions_total%</strong></span><br><span>Siege Status <strong>%siege_status%</strong></span><br><span>Siege Balance <strong>%siege_balance%</strong></span><br><span>Banner Control <strong>%banner_control%</strong></span><br><span>Battle Points <strong>%battle_points_attacker% / %battle_points_defender%</strong></span><br><span>Battle Time Left <strong>%battle_time_left%</strong></span>'
 style:
   # Y-level to put markers at
   y-level: 62
@@ -82,9 +83,23 @@ style:
 | `%public%`               | Town publicity status                                                  |
 | `%peaceful%`             | Is the town peaceful                                                   |
 | `%flags%`                | Flags of the town (pvp, mobs...)                                       |
-| `%war%`                  | Has active war                                                         |
+| `%war%`                  | Has active war (Works for EventWar/FlagWar)                        |
 | `%town_culture%`         | Culture of town, see https://github.com/TownyAdvanced/TownyCultures    |
 | `%town_resources%`       | Resources of town, see https://github.com/TownyAdvanced/TownyResources |
+
+SiegeWar Placeholders (https://github.com/TownyAdvanced/SiegeWar)
+| `%attacker%`       | Attacking town/nation in war|
+| `%defender%`       | Defending town/nation in war|
+| `%siege_type%`       | Type of Siege (Conquest, Revolt etc)|
+| `%sessions_completed%`       |Battle Sessions completed|
+| `%session_total%`       | Total amount of Battle Sessions|
+| `%war_chest%`       | War Chest (If economy is enabled for Towny)|
+| `%banner_control%`       | the ones controlling the banner |
+| `%siege_status%`       | Siege status |
+| `%siege_balance%`       |Siege balance|
+| `%battle_points_attacker%`       |Battle points on the attacker's side |
+| `%battle_points_defender%`       |Battle points on the defender's side |
+| `%battle_time_left%`       |Time left in the Battle Session |
 ## Building
 
 `./gradlew clean build`
