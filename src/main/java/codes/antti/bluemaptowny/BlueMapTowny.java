@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
-import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.markers.*;
@@ -225,15 +223,6 @@ public final class BlueMapTowny extends JavaPlugin {
         return t;
     }
 
-    private boolean isInSiegeWar(Town town) {
-        if (town.hasMeta("siegewar_hasSiege")) {
-            CustomDataField<?> cdf = town.getMetadata("siegewar_hasSiege");
-            if (cdf instanceof BooleanDataField)
-                return ((BooleanDataField) cdf).getValue();
-        }
-        return false;
-    }
-
     private void updateMarkers() {
         BlueMapAPI.getInstance().ifPresent((api) -> {
             for (World world : Bukkit.getWorlds()) {
@@ -319,7 +308,7 @@ public final class BlueMapTowny extends JavaPlugin {
                         }
                     }
 
-                    if (getServer().getPluginManager().isPluginEnabled("SiegeWar") && this.config.getBoolean("style.war-icon-enabled") && isInSiegeWar(town)) {
+                    if (getServer().getPluginManager().isPluginEnabled("SiegeWar") && this.config.getBoolean("style.war-icon-enabled") && SiegeWarAPI.hasActiveSiege(town)) {
                         Location flagLoc = SiegeWarAPI.getSiege(town).get().getFlagLocation();
                         POIMarker iconMarker = new POIMarker.Builder()
                                 .label(townName)
