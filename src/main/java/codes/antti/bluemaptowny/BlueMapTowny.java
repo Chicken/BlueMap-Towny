@@ -310,8 +310,7 @@ public final class BlueMapTowny extends JavaPlugin {
                         }
                     }
 
-              if(getServer().getPluginManager().isPluginEnabled("SiegeWar")){
-                        if (this.config.getBoolean("style.war-icon-enabled") && SiegeWarAPI.hasActiveSiege(town)) {
+                        if (getServer().getPluginManager().isPluginEnabled("SiegeWar") && this.config.getBoolean("style.war-icon-enabled") && SiegeWarAPI.hasActiveSiege(town)) {
                             Location flagLoc = SiegeWarAPI.getSiege(town).get().getFlagLocation();
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
@@ -320,7 +319,6 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .position(flagLoc.getX(), layerY, flagLoc.getZ())
                                     .build();
                             markers.put("siege." + townName + ".icon", iconMarker);
-                        }
                     }
                 });
             }
