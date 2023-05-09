@@ -225,15 +225,6 @@ public final class BlueMapTowny extends JavaPlugin {
         return t;
     }
 
-    private boolean isInSiegeWar(Town town) {
-        if (town.hasMeta("siegewar_hasSiege")) {
-            CustomDataField<?> cdf = town.getMetadata("siegewar_hasSiege");
-            if (cdf instanceof BooleanDataField)
-                return ((BooleanDataField) cdf).getValue();
-        }
-        return false;
-    }
-
     private void updateMarkers() {
         BlueMapAPI.getInstance().ifPresent((api) -> {
             for (World world : Bukkit.getWorlds()) {
@@ -291,7 +282,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
-                        } else if (this.config.getBoolean("style.war-icon-enabled") && town.hasActiveWar()) {
+                        } else if (this.config.getBoolean("style.war-icon-enabled") && (town.hasActiveWar())) {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
@@ -319,15 +310,17 @@ public final class BlueMapTowny extends JavaPlugin {
                         }
                     }
 
-                    if (getServer().getPluginManager().isPluginEnabled("SiegeWar") && this.config.getBoolean("style.war-icon-enabled") && isInSiegeWar(town)) {
-                        Location flagLoc = SiegeWarAPI.getSiege(town).get().getFlagLocation();
-                        POIMarker iconMarker = new POIMarker.Builder()
-                                .label(townName)
-                                .detail(siegeDetails)
-                                .icon(this.config.getString("style.war-icon"), 8, 8)
-                                .position(flagLoc.getX(), layerY, flagLoc.getZ())
-                                .build();
-                        markers.put("towny." + townName + ".siege", iconMarker);
+              if(getServer().getPluginManager().isPluginEnabled("SiegeWar")){
+                        if (this.config.getBoolean("style.war-icon-enabled") && SiegeWarAPI.hasActiveSiege(town)) {
+                            Location flagLoc = SiegeWarAPI.getSiege(town).get().getFlagLocation();
+                            POIMarker iconMarker = new POIMarker.Builder()
+                                    .label(townName)
+                                    .detail(siegeDetails)
+                                    .icon(this.config.getString("style.war-icon"), 8, 8)
+                                    .position(flagLoc.getX(), layerY, flagLoc.getZ())
+                                    .build();
+                            markers.put("siege." + townName + ".icon", iconMarker);
+                        }
                     }
                 });
             }
