@@ -39,16 +39,34 @@ public final class BlueMapTowny extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        boolean isFolia = isFolia();
         BlueMapAPI.onEnable((api) -> {
             reloadConfig();
             saveDefaultConfig();
             this.config = getConfig();
             initMarkerSets();
-            Bukkit.getScheduler().runTaskTimer(this, this::updateMarkers, 0, this.config.getLong("update-interval") * 20);
+            if (isFolia) {
+                Bukkit.getServer().getGlobalRegionScheduler().runAtFixedRate(this, task -> this.updateMarkers(), 1L, this.config.getLong("update-interval") * 20L);
+            } else {
+                Bukkit.getScheduler().runTaskTimer(this, this::updateMarkers, 1L, this.config.getLong("update-interval") * 20L);
+            }
         });
         BlueMapAPI.onDisable((api) -> {
-            Bukkit.getScheduler().cancelTasks(this);
+            if (isFolia) {
+                Bukkit.getServer().getGlobalRegionScheduler().cancelTasks(this);
+            } else {
+                Bukkit.getScheduler().cancelTasks(this);
+            }
         });
+    }
+
+    private static boolean isFolia() {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
     private void initMarkerSets() {
