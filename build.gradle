@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group = 'codes.antti'
@@ -35,6 +36,7 @@ dependencies {
     compileOnly 'com.github.BlueMap-Minecraft:BlueMapAPI:v2.4.0'
     compileOnly 'com.github.TownyAdvanced:SiegeWar:2.4.0'
     compileOnly 'us.dynmap:DynmapCoreAPI:3.4'
+    implementation 'com.github.TechnicJelle:UpdateCheckerJava:v2.1'
 }
 
 def targetJavaVersion = 17
@@ -60,4 +62,8 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
