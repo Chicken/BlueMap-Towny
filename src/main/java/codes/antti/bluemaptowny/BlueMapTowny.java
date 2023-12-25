@@ -204,7 +204,7 @@ public final class BlueMapTowny extends JavaPlugin {
         flags.add("Has Upkeep: " + town.hasUpkeep());
         flags.add("PvP: " + town.isPVP());
         flags.add("Mobs: " + town.hasMobs());
-        flags.add("Explosion: " + town.isBANG());
+        flags.add("Explosion: " + town.isExplosion());
         flags.add("Fire: " + town.isFire());
         flags.add("Nation: " + nation);
         if (TownySettings.getBoolean(ConfigNodes.TOWN_RUINING_TOWN_RUINS_ENABLED)) {

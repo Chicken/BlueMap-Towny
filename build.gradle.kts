@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     compileOnly ("dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
-    compileOnly ("com.palmergames.bukkit.towny:towny:0.98.3.0")
+    compileOnly ("com.palmergames.bukkit.towny:towny:0.100.0.0")
     compileOnly ("com.github.BlueMap-Minecraft:BlueMapAPI:v2.4.0")
     compileOnly ("com.github.TownyAdvanced:SiegeWar:2.4.0")
     compileOnly ("us.dynmap:DynmapCoreAPI:3.4")
