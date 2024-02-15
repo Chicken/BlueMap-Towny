@@ -9,6 +9,7 @@ group = "codes.antti"
 version = "2.0.1"
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         setUrl ("https://repo.papermc.io/repository/maven-public/")
@@ -34,6 +35,10 @@ dependencies {
     compileOnly ("com.github.TownyAdvanced:SiegeWar:2.4.0")
     compileOnly ("us.dynmap:DynmapCoreAPI:3.4")
     implementation ("com.github.TechnicJelle:UpdateCheckerJava:v2.1") {
+        exclude ( group = "org.jetbrains", module = "annotations" )
+        exclude ( group = "org.intellij.lang", module = "annotations" )
+    }
+    implementation ("com.technicjelle:BMUtils:1.2") {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }

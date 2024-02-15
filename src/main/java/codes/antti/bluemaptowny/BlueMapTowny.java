@@ -2,15 +2,17 @@ package codes.antti.bluemaptowny;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import com.technicjelle.Cheese;
+import de.bluecolored.bluemap.api.markers.*;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,9 +21,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector2i;
-import com.flowpowered.math.vector.Vector3d;
 import com.gmail.goosius.siegewar.SiegeWarAPI;
 import com.gmail.goosius.siegewar.enums.SiegeSide;
 import com.gmail.goosius.siegewar.objects.Siege;
@@ -38,13 +38,7 @@ import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.technicjelle.UpdateChecker;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.markers.LineMarker;
-import de.bluecolored.bluemap.api.markers.Marker;
-import de.bluecolored.bluemap.api.markers.MarkerSet;
-import de.bluecolored.bluemap.api.markers.POIMarker;
-import de.bluecolored.bluemap.api.markers.ShapeMarker;
 import de.bluecolored.bluemap.api.math.Color;
-import de.bluecolored.bluemap.api.math.Line;
 import de.bluecolored.bluemap.api.math.Shape;
 
 public final class BlueMapTowny extends JavaPlugin {
@@ -273,40 +267,26 @@ public final class BlueMapTowny extends JavaPlugin {
                 TownyWorld townyworld = TownyAPI.getInstance().getTownyWorld(world);
                 if (townyworld == null) continue;
                 TownyAPI.getInstance().getTowns().forEach((town) -> {
-                    List<List<Vector2d>> borders = new ArrayList<>();
-                    List<List<Vector2d>> areas = new ArrayList<>();
-                    Set<Vector2i> chunks = town.getTownBlocks().stream().filter((tb) -> tb.getWorld().equals(townyworld)).map((tb) -> new Vector2i(tb.getX(), tb.getZ())).collect(Collectors.toSet());
-                    MapUtils.areaToBlockPolygon(chunks, TownySettings.getTownBlockSize(), areas, borders);
+                    Vector2i[] chunks = town.getTownBlocks().stream().filter((tb) -> tb.getWorld().equals(townyworld)).map((tb) -> new Vector2i(tb.getX(), tb.getZ())).toArray(Vector2i[]::new);
+                    Collection<Cheese> cheeses = Cheese.createMultiCheeseFromChunks(chunks);
                     double layerY = this.config.getDouble("style.y-level");
                     String townName = town.getName();
                     String townDetails = fillPlaceholders(this.config.getString("popup"), town);
                     String siegeDetails = fillPlaceholders(this.config.getString("popup-siege"), town);
                     int seq = 0;
-                    for (List<Vector2d> area : areas) {
+                    for (Cheese cheese : cheeses) {
                         ShapeMarker chunkMarker = new ShapeMarker.Builder()
-                                .label(townName)
-                                .detail(townDetails)
-                                .lineColor(new Color(0))
-                                .fillColor(getFillColor(town))
-                                .depthTestEnabled(false)
-                                .shape(new Shape(area), (float) layerY)
-                                .centerPosition()
-                                .build();
-                        markers.put("towny." + townName + ".area." + seq, chunkMarker);
-                        seq += 1;
-                    }
-                    seq = 0;
-                    for (List<Vector2d> border : borders) {
-                        LineMarker borderMarker = new LineMarker.Builder()
                                 .label(townName)
                                 .detail(townDetails)
                                 .lineColor(getLineColor(town))
                                 .lineWidth(this.config.getInt("style.border-width"))
+                                .fillColor(getFillColor(town))
                                 .depthTestEnabled(false)
-                                .line(new Line(border.stream().map(v2 -> Vector3d.from(v2.getX(), layerY, v2.getY())).collect(Collectors.toList())))
+                                .shape(cheese.getShape(), (float) layerY)
+                                .holes(cheese.getHoles().toArray(Shape[]::new))
                                 .centerPosition()
                                 .build();
-                        markers.put("towny." + townName + ".border." + seq, borderMarker);
+                        markers.put("towny." + townName + ".area." + seq, chunkMarker);
                         seq += 1;
                     }
                     Optional<Location> spawn = Optional.ofNullable(town.getSpawnOrNull());
