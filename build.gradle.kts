@@ -9,7 +9,6 @@ group = "codes.antti"
 version = "2.0.1"
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven {
         setUrl ("https://repo.papermc.io/repository/maven-public/")
@@ -38,7 +37,7 @@ dependencies {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }
-    implementation ("com.technicjelle:BMUtils:1.2") {
+    implementation ("com.github.TechnicJelle:BMUtils:v2.0") {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }
