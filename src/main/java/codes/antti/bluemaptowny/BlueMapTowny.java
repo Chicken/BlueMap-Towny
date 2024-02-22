@@ -297,6 +297,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .label(townName)
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.ruined-icon"), 8, 8)
+                                    .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
@@ -305,6 +306,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .label(townName)
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.war-icon"), 8, 8)
+                                    .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
@@ -313,6 +315,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .label(townName)
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.capital-icon"), 8, 8)
+                                    .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
 
@@ -322,6 +325,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .label(townName)
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.home-icon"), 8, 8)
+                                    .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
@@ -334,6 +338,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                 .label(townName)
                                 .detail(siegeDetails)
                                 .icon(this.config.getString("style.war-icon"), 8, 8)
+                                .styleClasses("towny-icon")
                                 .position(flagLoc.getX(), layerY, flagLoc.getZ())
                                 .build();
                         markers.put("towny." + townName + ".siege", iconMarker);
