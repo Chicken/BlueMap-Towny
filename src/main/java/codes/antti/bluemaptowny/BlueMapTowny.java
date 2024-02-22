@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.technicjelle.Cheese;
@@ -61,9 +62,9 @@ public final class BlueMapTowny extends JavaPlugin {
             this.config = getConfig();
             initMarkerSets();
             if (isFolia) {
-                Bukkit.getServer().getGlobalRegionScheduler().runAtFixedRate(this, task -> this.updateMarkers(), 1L, this.config.getLong("update-interval") * 20L);
+                Bukkit.getServer().getAsyncScheduler().runAtFixedRate(this, task -> this.updateMarkers(), 1L, this.config.getLong("update-interval"), TimeUnit.SECONDS);
             } else {
-                Bukkit.getScheduler().runTaskTimer(this, this::updateMarkers, 1L, this.config.getLong("update-interval") * 20L);
+                Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::updateMarkers, 0L, this.config.getLong("update-interval") * 20);
             }
         });
         BlueMapAPI.onDisable((api) -> {
