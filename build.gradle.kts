@@ -37,6 +37,10 @@ dependencies {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }
+    implementation ("com.github.TechnicJelle:BMUtils:v2.0") {
+        exclude ( group = "org.jetbrains", module = "annotations" )
+        exclude ( group = "org.intellij.lang", module = "annotations" )
+    }
 }
 
 val javaTarget = 17
