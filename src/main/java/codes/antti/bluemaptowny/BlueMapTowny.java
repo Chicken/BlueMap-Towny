@@ -269,7 +269,7 @@ public final class BlueMapTowny extends JavaPlugin {
                 if (townyworld == null) continue;
                 TownyAPI.getInstance().getTowns().forEach((town) -> {
                     Vector2i[] chunks = town.getTownBlocks().stream().filter((tb) -> tb.getWorld().equals(townyworld)).map((tb) -> new Vector2i(tb.getX(), tb.getZ())).toArray(Vector2i[]::new);
-                    Collection<Cheese> cheeses = Cheese.createMultiCheeseFromChunks(chunks);
+                    Collection<Cheese> cheeses = Cheese.createPlatterFromChunks(chunks);
                     double layerY = this.config.getDouble("style.y-level");
                     String townName = town.getName();
                     String townDetails = fillPlaceholders(this.config.getString("popup"), town);
