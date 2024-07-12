@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.flowpowered.math.vector.Vector2d;
 import com.technicjelle.BMUtils.Cheese;
 import de.bluecolored.bluemap.api.markers.*;
 import org.apache.commons.lang.WordUtils;
@@ -269,7 +270,9 @@ public final class BlueMapTowny extends JavaPlugin {
                 if (townyworld == null) continue;
                 TownyAPI.getInstance().getTowns().forEach((town) -> {
                     Vector2i[] chunks = town.getTownBlocks().stream().filter((tb) -> tb.getWorld().equals(townyworld)).map((tb) -> new Vector2i(tb.getX(), tb.getZ())).toArray(Vector2i[]::new);
-                    Collection<Cheese> cheeses = Cheese.createPlatterFromChunks(chunks);
+                    int townSize = TownySettings.getTownBlockSize();
+                    Vector2d cellSize = new Vector2d(townSize, townSize);
+                    Collection<Cheese> cheeses = Cheese.createPlatterFromCells(cellSize, chunks);
                     double layerY = this.config.getDouble("style.y-level");
                     String townName = town.getName();
                     String townDetails = fillPlaceholders(this.config.getString("popup"), town);
