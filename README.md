@@ -38,6 +38,9 @@ dynamic-town-colors: true
 popup: '<span style="font-size: 120%">%name% (%nation%)</span><br><span>Mayor <strong>%mayor%</strong></span><br><span>Residents <strong>%residents%</strong></span><br><span>Bank <strong>%bank%</strong></span>'
 # HTML for War popup(SiegeWar Only), placeholders documented in README
 popup-siege: '<span style="font-size: 120%"><strong>Siege: %attacker% vs %defender%</strong></span><br><hr><span>Town <strong>%name%</strong></span><br><span>Type <strong>%siege_type%</strong></span><br><span>War Chest <strong>%war_chest%</strong></span><br><span>Siege Progress <strong>%sessions_completed%/%sessions_total%</strong></span><br><span>Siege Status <strong>%siege_status%</strong></span><br><span>Siege Balance <strong>%siege_balance%</strong></span><br><span>Banner Control <strong>%banner_control%</strong></span><br><span>Battle Points <strong>%battle_points_attacker% / %battle_points_defender%</strong></span><br><span>Battle Time Left <strong>%battle_time_left%</strong></span>'
+# If you want claims with holes in them to show up as fully claimed if only the perimeter is claimed.
+# This means that the map will LIE about the actual claim status of the area!!!
+lie-about-holes: false
 style:
   # Y-level to put markers at
   y-level: 62
