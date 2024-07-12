@@ -279,15 +279,16 @@ public final class BlueMapTowny extends JavaPlugin {
                     String siegeDetails = fillPlaceholders(this.config.getString("popup-siege"), town);
                     int seq = 0;
                     for (Cheese cheese : cheeses) {
-                        ShapeMarker chunkMarker = new ShapeMarker.Builder()
+                        ShapeMarker.Builder chunkMarkerBuilder = new ShapeMarker.Builder()
                                 .label(townName)
                                 .detail(townDetails)
                                 .lineColor(getLineColor(town))
                                 .lineWidth(this.config.getInt("style.border-width"))
                                 .fillColor(getFillColor(town))
                                 .depthTestEnabled(false)
-                                .shape(cheese.getShape(), (float) layerY)
-                                .holes(cheese.getHoles().toArray(Shape[]::new))
+                                .shape(cheese.getShape(), (float) layerY);
+                        if (this.config.getBoolean("lie-about-holes", false) == false) chunkMarkerBuilder.holes(cheese.getHoles().toArray(Shape[]::new));
+                        ShapeMarker chunkMarker = chunkMarkerBuilder
                                 .centerPosition()
                                 .build();
                         markers.put("towny." + townName + ".area." + seq, chunkMarker);
