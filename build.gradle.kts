@@ -37,7 +37,7 @@ dependencies {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }
-    implementation ("com.github.TechnicJelle:BMUtils:v3.0") {
+    implementation ("com.github.TechnicJelle:BMUtils:v4.2") {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }
