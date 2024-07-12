@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import com.technicjelle.Cheese;
+import com.technicjelle.BMUtils.Cheese;
 import de.bluecolored.bluemap.api.markers.*;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
