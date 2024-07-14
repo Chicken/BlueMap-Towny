@@ -1,20 +1,28 @@
 package codes.antti.bluemaptowny;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
+import codes.antti.bluemaptowny.TownyCommands.SetTownMarker;
 import com.flowpowered.math.vector.Vector2d;
+import com.flowpowered.math.vector.Vector2i;
+import com.gmail.goosius.siegewar.SiegeWarAPI;
+import com.gmail.goosius.siegewar.enums.SiegeSide;
+import com.gmail.goosius.siegewar.objects.Siege;
+import com.gmail.goosius.siegewar.settings.SiegeWarSettings;
+import com.palmergames.bukkit.config.ConfigNodes;
+import com.palmergames.bukkit.towny.*;
+import com.palmergames.bukkit.towny.object.AddonCommand;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.technicjelle.BMUtils.Cheese;
-import de.bluecolored.bluemap.api.markers.*;
+import com.technicjelle.UpdateChecker;
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.markers.Marker;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.POIMarker;
+import de.bluecolored.bluemap.api.markers.ShapeMarker;
+import de.bluecolored.bluemap.api.math.Color;
+import de.bluecolored.bluemap.api.math.Shape;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,29 +31,20 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.flowpowered.math.vector.Vector2i;
-import com.gmail.goosius.siegewar.SiegeWarAPI;
-import com.gmail.goosius.siegewar.enums.SiegeSide;
-import com.gmail.goosius.siegewar.objects.Siege;
-import com.gmail.goosius.siegewar.settings.SiegeWarSettings;
-import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.TownyFormatter;
-import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyObject;
-import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.utils.TownRuinUtil;
-import com.technicjelle.UpdateChecker;
-
-import de.bluecolored.bluemap.api.BlueMapAPI;
-import de.bluecolored.bluemap.api.math.Color;
-import de.bluecolored.bluemap.api.math.Shape;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public final class BlueMapTowny extends JavaPlugin {
+
+
     private final Map<UUID, MarkerSet> townMarkerSets = new ConcurrentHashMap<>();
     private Configuration config;
+
+    public static BlueMapTowny plugin;
 
     @Override
     public void onEnable() {
@@ -61,7 +60,10 @@ public final class BlueMapTowny extends JavaPlugin {
             reloadConfig();
             saveDefaultConfig();
             this.config = getConfig();
+            this.plugin = this;
             initMarkerSets();
+            registerCommands();
+            makeAssetsFolder();
             if (isFolia) {
                 Bukkit.getServer().getAsyncScheduler().runAtFixedRate(this, task -> this.updateMarkers(), 1L, this.config.getLong("update-interval"), TimeUnit.SECONDS);
             } else {
@@ -205,7 +207,8 @@ public final class BlueMapTowny extends JavaPlugin {
         flags.add("Nation: " + nation);
         if (TownySettings.getBoolean(ConfigNodes.TOWN_RUINING_TOWN_RUINS_ENABLED)) {
             String ruinedString = "Ruined: " + town.isRuined();
-            if (town.isRuined()) ruinedString += " (Time left: " + (TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)) + " hours)";
+            if (town.isRuined())
+                ruinedString += " (Time left: " + (TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)) + " hours)";
             flags.add(ruinedString);
         }
         t = t.replace("%flags%", String.join("<br />", flags));
@@ -222,7 +225,7 @@ public final class BlueMapTowny extends JavaPlugin {
             t = t.replace("%town_resources%", "");
         }
 
-        if(getServer().getPluginManager().isPluginEnabled("SiegeWar")) {
+        if (getServer().getPluginManager().isPluginEnabled("SiegeWar")) {
             if (SiegeWarAPI.hasSiege(town)) {
                 Siege siege = SiegeWarAPI.getSiege(town).get();
                 t = t.replace("%attacker%", siege.getAttackerNameForDisplay());
@@ -240,7 +243,7 @@ public final class BlueMapTowny extends JavaPlugin {
                 }
 
                 t = t.replace("%banner_control%", WordUtils.capitalizeFully(siege.getBannerControllingSide().name())
-                        + (siege.getBannerControllingSide() == SiegeSide.NOBODY ? "" :  " (" + siege.getBannerControllingResidents().size() + ")"));
+                        + (siege.getBannerControllingSide() == SiegeSide.NOBODY ? "" : " (" + siege.getBannerControllingResidents().size() + ")"));
 
                 t = t.replace("%siege_status%", siege.getStatus().getName());
 
@@ -256,6 +259,29 @@ public final class BlueMapTowny extends JavaPlugin {
         }
 
         return t;
+    }
+
+    private String fillTownyIcons(Town town) {
+        String icon;
+        if (town.hasMeta("mapMarker")){
+            switch (config.getInt("use-links-as-image-source")) {
+                case 1 -> {
+                    icon = "assets/TownMarkers/" + town.getMetadata("mapMarker").getValue().toString();
+                    return icon;
+                }
+                case 2 -> {
+                    icon = town.getMetadata("mapMarker").getValue().toString();
+                    return icon;
+                }
+                default -> {
+                    icon = this.config.getString("style.home-icon");
+                    return icon;
+                }
+            }
+        }else{
+            icon = this.config.getString("style.home-icon");
+        }
+        return icon;
     }
 
     private void updateMarkers() {
@@ -328,7 +354,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
-                                    .icon(this.config.getString("style.home-icon"), 8, 8)
+                                    .icon(fillTownyIcons(town), 8, 8)
                                     .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
@@ -350,5 +376,19 @@ public final class BlueMapTowny extends JavaPlugin {
                 });
             }
         });
+    }
+
+    private void registerCommands(){
+        if(config.getInt("use-links-as-image-source") == 1 || config.getInt("use-links-as-image-source") == 2){
+            AddonCommand setTownMarker = new AddonCommand(TownyCommandAddonAPI.CommandType.TOWN_SET, "marker", new SetTownMarker());
+            TownyCommandAddonAPI.addSubCommand(setTownMarker);
+        }
+    }
+
+    private void makeAssetsFolder(){
+        File file = new File(BlueMapAPI.getInstance().get().getWebApp().getWebRoot().toFile(), "/assets/TownMarkers");
+        if(!file.exists()){
+            file.mkdir();
+        }
     }
 }
