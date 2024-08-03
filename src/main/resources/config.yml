@@ -14,9 +14,6 @@ popup-siege: '<span style="font-size: 120%"><strong>Siege: %attacker% vs %defend
 # If you want claims with holes in them to show up as fully claimed if only the perimeter is claimed.
 # This means that the map will LIE about the actual claim status of the area!!!
 lie-about-holes: false
-# If you want to have towns have the option to use their own image markers (By default it's only a locked to 1 default image for every town)
-# 0 for default, 1 as customizable within a preset of images inside a folder created by the plugin, 2 as letting the town/players choose their own town marker via a link (BE WARNED THAT YOU HAVE TO TRUST THE GOODWILL OF YOUR PLAYERS FOR THIS)
-use-links-as-image-source: 0
 style:
   # Y-level to put markers at
   y-level: 62
@@ -29,7 +26,10 @@ style:
   fill-opacity: 0.35
   # Path to icons on web or a link
   # Town home
-  home-icon-enabled: false
+  # If you want to have towns have the option to use their own image markers (By default it's only a locked to 1 default image for every town)
+  # "disabled", if you want to disable the home icon, "only-default" for default, "preset" as customizable within a preset of images inside a folder created by the plugin, "link" as letting the town/players choose their own town marker via a link (BE WARNED THAT YOU HAVE TO TRUST THE GOODWILL OF YOUR PLAYERS FOR THIS)
+  # Changing between the "preset" and "link" types will break existing home markers
+  home-icon-style: "only-default"
   home-icon: assets/house.png
   # Nation capital
   capital-icon-enabled: false
