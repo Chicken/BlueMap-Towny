@@ -110,6 +110,12 @@ style:
 | `%battle_points_defender%` | Battle points on the defender's side        |
 | `%battle_time_left%`       | Time left in the Battle Session             |
 
+### Permissions
+
+| Permission                 | Content                                     |
+|----------------------------|---------------------------------------------|
+| `towny.command.town.set.townmarker` | Able to set their own Town Markers with /town set marker                |
+
 ## Building
 
 `./gradlew clean build`
