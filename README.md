@@ -53,12 +53,15 @@ style:
   fill-opacity: 0.35
   # Path to icons on web or a link
   # Town home
-  home-icon-enabled: false
+  # If you want to have towns have the option to use their own image markers (By default it's only a locked to 1 default image for every town)
+  # "disabled", if you want to disable the home icon, "only-default" for default, "preset" as customizable within a preset of images inside a folder created by the plugin, "link" as letting the town/players choose their own town marker via a link (BE WARNED THAT YOU HAVE TO TRUST THE GOODWILL OF YOUR PLAYERS FOR THIS)
+  # Changing between the "preset" and "link" types will break existing home markers
+  home-icon-style: "only-default"
   home-icon: assets/house.png
   # Nation capital
   capital-icon-enabled: false
   capital-icon: assets/king.png
-  # Icon during war
+  # Icon during War
   war-icon-enabled: false
   war-icon: assets/war.png
   # Icon for ruined towns
@@ -106,6 +109,12 @@ style:
 | `%battle_points_attacker%` | Battle points on the attacker's side        |
 | `%battle_points_defender%` | Battle points on the defender's side        |
 | `%battle_time_left%`       | Time left in the Battle Session             |
+
+### Permissions
+
+| Permission                 | Content                                     |
+|----------------------------|---------------------------------------------|
+| `towny.command.town.set.townmarker` | Able to set their own Town Markers with /town set marker                |
 
 ## Building
 
