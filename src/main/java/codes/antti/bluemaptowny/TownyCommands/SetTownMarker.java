@@ -21,6 +21,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class SetTownMarker implements CommandExecutor, TabExecutor {
+
+    Plugin plugin = BlueMapTowny.plugin;
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
@@ -34,11 +37,17 @@ public class SetTownMarker implements CommandExecutor, TabExecutor {
             return true;
         }
 
-        if (!resident.isMayor() && !((Player) sender).getPlayer().hasPermission("towny.command.town.set.townmarker")) {
+        if (!resident.isMayor() || !((Player) sender).getPlayer().hasPermission("towny.command.town.set.townmarker")) {
             TownyMessaging.sendErrorMsg(sender, "You don't have permission for this or aren't the Mayor!");
             return true;
         }
 
+        if(plugin.getConfig().getString("home-icon-style").equalsIgnoreCase("preset")){
+            if(ifFileExists(String.join(" ", args)) == false){
+                TownyMessaging.sendErrorMsg(resident, "This file isn't a valid file!");
+                return true;
+            }
+        }
         TownyMessaging.sendPrefixedTownMessage(resident.getTownOrNull(), "Town Marker has been set to: " + String.join(" ", args));
         resident.getTownOrNull().addMetaData(new StringDataField("mapMarker", String.join(" ", args)));
 
@@ -48,7 +57,6 @@ public class SetTownMarker implements CommandExecutor, TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Plugin plugin = BlueMapTowny.plugin;
         switch (plugin.getConfig().getInt("use-links-as-image-source")) {
             case 1 -> {
                 File file = new File(BlueMapAPI.getInstance().get().getWebApp().getWebRoot().toFile(), "/assets/TownMarkers");
@@ -59,11 +67,19 @@ public class SetTownMarker implements CommandExecutor, TabExecutor {
                 return Collections.emptyList();
             }
             case 2 -> {
-                return Collections.singletonList("<insert link here>");
+                return Collections.singletonList("<link>");
             }
             default -> {
                 return Collections.emptyList();
             }
         }
+    }
+
+    public boolean ifFileExists(String string){
+        File file = new File(BlueMapAPI.getInstance().get().getWebApp().getWebRoot().toFile(), "/assets/townmarkers/" + string);
+        if(file.isFile()) {
+            return true;
+        }
+        return false;
     }
 }
