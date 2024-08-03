@@ -264,12 +264,12 @@ public final class BlueMapTowny extends JavaPlugin {
     private String fillTownyIcons(Town town) {
         String icon;
         if (town.hasMeta("mapMarker")){
-            switch (config.getInt("use-links-as-image-source")) {
-                case 1 -> {
-                    icon = "assets/TownMarkers/" + town.getMetadata("mapMarker").getValue().toString();
+            switch (config.getString("home-icon-style")) {
+                case "preset" -> {
+                    icon = "assets/townmarkers/" + town.getMetadata("mapMarker").getValue().toString();
                     return icon;
                 }
-                case 2 -> {
+                case "link" -> {
                     icon = town.getMetadata("mapMarker").getValue().toString();
                     return icon;
                 }
@@ -350,7 +350,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .build();
 
                             markers.put("towny." + townName + ".icon", iconMarker);
-                        } else if (this.config.getBoolean("style.home-icon-enabled")) {
+                        } else if (!this.config.getString("style.home-icon-style").equalsIgnoreCase("disabled")) {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
@@ -379,14 +379,17 @@ public final class BlueMapTowny extends JavaPlugin {
     }
 
     private void registerCommands(){
-        if(config.getInt("use-links-as-image-source") == 1 || config.getInt("use-links-as-image-source") == 2){
-            AddonCommand setTownMarker = new AddonCommand(TownyCommandAddonAPI.CommandType.TOWN_SET, "marker", new SetTownMarker());
+        AddonCommand setTownMarker = new AddonCommand(TownyCommandAddonAPI.CommandType.TOWN_SET, "marker", new SetTownMarker());
+        if(config.getString("home-icon-style").equalsIgnoreCase("preset")|| config.getString("home-icon-style").equalsIgnoreCase("link")){
             TownyCommandAddonAPI.addSubCommand(setTownMarker);
+        }else{
+                TownyCommandAddonAPI.removeSubCommand(setTownMarker);
         }
+
     }
 
     private void makeAssetsFolder(){
-        File file = new File(BlueMapAPI.getInstance().get().getWebApp().getWebRoot().toFile(), "/assets/TownMarkers");
+        File file = new File(BlueMapAPI.getInstance().get().getWebApp().getWebRoot().toFile(), "/assets/townmarkers");
         if(!file.exists()){
             file.mkdir();
         }
