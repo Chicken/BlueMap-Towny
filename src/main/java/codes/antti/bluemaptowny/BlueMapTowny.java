@@ -144,7 +144,7 @@ public final class BlueMapTowny extends JavaPlugin {
     private String fillPlaceholders(String template, Town town) {
         String t = template;
 
-        t = t.replace("%name%", town.getName());
+        t = t.replace("%name%", town.getName().replace("_", " "));
 
         t = t.replace("%mayor%", town.hasMayor() ? town.getMayor().getName() : "");
 
@@ -186,7 +186,7 @@ public final class BlueMapTowny extends JavaPlugin {
             t = t.replace("%bank%", TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()));
         }
 
-        String nation = town.hasNation() ? Objects.requireNonNull(town.getNationOrNull()).getName() : "";
+        String nation = town.hasNation() ? Objects.requireNonNull(town.getNationOrNull()).getName().replace("_", " ") : "";
         t = t.replace("%nation%", nation);
         t = t.replace("%nationstatus%", town.hasNation() ? (town.isCapital() ? "Capital of " + nation : "Member of " + nation) : "");
 
