@@ -144,7 +144,7 @@ public final class BlueMapTowny extends JavaPlugin {
     private String fillPlaceholders(String template, Town town) {
         String t = template;
 
-        t = t.replace("%name%", town.getName());
+        t = t.replace("%name%", town.getName().replace("_", " "));
 
         t = t.replace("%mayor%", town.hasMayor() ? town.getMayor().getName() : "");
 
