@@ -300,7 +300,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
-                                    .icon(this.config.getString("style.ruined-icon"), 8, 8)
+                                    .icon(this.config.getString("style.ruined-icon"), this.config.getInt("style.ruined-icon-anchor-x", 8), this.config.getInt("style.ruined-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
@@ -309,7 +309,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
-                                    .icon(this.config.getString("style.war-icon"), 8, 8)
+                                    .icon(this.config.getString("style.war-icon"), this.config.getInt("style.war-icon-anchor-x", 8), this.config.getInt("style.war-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
@@ -318,7 +318,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
-                                    .icon(this.config.getString("style.capital-icon"), 8, 8)
+                                    .icon(this.config.getString("style.capital-icon"), this.config.getInt("style.capital-icon-anchor-x", 8), this.config.getInt("style.capital-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
@@ -328,7 +328,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             POIMarker iconMarker = new POIMarker.Builder()
                                     .label(townName)
                                     .detail(townDetails)
-                                    .icon(this.config.getString("style.home-icon"), 8, 8)
+                                    .icon(this.config.getString("style.home-icon"), this.config.getInt("style.home-icon-anchor-x", 8), this.config.getInt("style.home-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
                                     .position(spawn.get().getX(), layerY, spawn.get().getZ())
                                     .build();
@@ -341,7 +341,7 @@ public final class BlueMapTowny extends JavaPlugin {
                         POIMarker iconMarker = new POIMarker.Builder()
                                 .label(townName)
                                 .detail(siegeDetails)
-                                .icon(this.config.getString("style.war-icon"), 8, 8)
+                                .icon(this.config.getString("style.war-icon"), this.config.getInt("style.war-icon-anchor-x", 8), this.config.getInt("style.war-icon-anchor-y", 8))
                                 .styleClasses("towny-icon")
                                 .position(flagLoc.getX(), layerY, flagLoc.getZ())
                                 .build();

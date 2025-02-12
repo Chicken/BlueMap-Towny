@@ -21,6 +21,8 @@ Does not have support for external plugins hooking into placeholders.
 ## Installation
 
 Put the plugin jar file inside your plugins folder and have both Towny and BlueMap installed.
+The plugin does not come with any default icons. I recommend just using
+[Dynmap's marker icons](https://github.com/webbukkit/dynmap/tree/v3.0/DynmapCore/src/main/resources/markers)
 
 ## Config
 
@@ -55,15 +57,23 @@ style:
   # Town home
   home-icon-enabled: false
   home-icon: assets/house.png
+  home-icon-anchor-x: 8
+  home-icon-anchor-y: 8
   # Nation capital
   capital-icon-enabled: false
   capital-icon: assets/king.png
+  capital-icon-anchor-x: 8
+  capital-icon-anchor-y: 8
   # Icon during war
   war-icon-enabled: false
   war-icon: assets/war.png
+  war-icon-anchor-x: 8
+  war-icon-anchor-y: 8
   # Icon for ruined towns
   ruined-icon-enabled: false
   ruined-icon: assets/ruined.png
+  ruined-icon-anchor-x: 8
+  ruined-icon-anchor-y: 8
 ```
 
 ### Popup placeholders
