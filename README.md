@@ -46,6 +46,8 @@ lie-about-holes: false
 style:
   # Y-level to put markers at
   y-level: 62
+  # Use y level of town home, fallback to y-level
+  use-home-y: false
   # Town border settings
   border-color: '#FF0000'
   border-opacity: 0.8

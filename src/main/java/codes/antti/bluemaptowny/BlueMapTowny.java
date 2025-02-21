@@ -273,7 +273,9 @@ public final class BlueMapTowny extends JavaPlugin {
                     int townSize = TownySettings.getTownBlockSize();
                     Vector2d cellSize = new Vector2d(townSize, townSize);
                     Collection<Cheese> cheeses = Cheese.createPlatterFromCells(cellSize, chunks);
-                    double layerY = this.config.getDouble("style.y-level");
+                    double layerY = this.config.getBoolean("style.use-home-y", false)
+                            ? Optional.ofNullable(town.getSpawnOrNull()).map(Location::getY).orElse(this.config.getDouble("style.y-level"))
+                            : this.config.getDouble("style.y-level");
                     String townName = town.getName();
                     String townDetails = fillPlaceholders(this.config.getString("popup"), town);
                     String siegeDetails = fillPlaceholders(this.config.getString("popup-siege"), town);
@@ -287,7 +289,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                 .fillColor(getFillColor(town))
                                 .depthTestEnabled(false)
                                 .shape(cheese.getShape(), (float) layerY);
-                        if (this.config.getBoolean("lie-about-holes", false) == false) chunkMarkerBuilder.holes(cheese.getHoles().toArray(Shape[]::new));
+                        if (!this.config.getBoolean("lie-about-holes", false)) chunkMarkerBuilder.holes(cheese.getHoles().toArray(Shape[]::new));
                         ShapeMarker chunkMarker = chunkMarkerBuilder
                                 .centerPosition()
                                 .build();
