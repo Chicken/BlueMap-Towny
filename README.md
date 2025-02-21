@@ -44,9 +44,9 @@ popup-siege: '<span style="font-size: 120%"><strong>Siege: %attacker% vs %defend
 # This means that the map will LIE about the actual claim status of the area!!!
 lie-about-holes: false
 style:
-  # Y-level to put markers at
+  # Y-level to put area markers at, icons are at spawn positions
   y-level: 62
-  # Use y level of town home, fallback to y-level
+  # Use y level of town home for areas, fallback to y-level
   use-home-y: false
   # Town border settings
   border-color: '#FF0000'
@@ -76,6 +76,11 @@ style:
   ruined-icon: assets/ruined.png
   ruined-icon-anchor-x: 8
   ruined-icon-anchor-y: 8
+  # Icon for outposts
+  outpost-icon-enabled: false
+  outpost-icon: assets/tower.png
+  outpost-icon-anchor-x: 8
+  outpost-icon-anchor-y: 8
 ```
 
 ### Popup placeholders

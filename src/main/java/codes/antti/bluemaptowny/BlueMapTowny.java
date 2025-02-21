@@ -297,6 +297,20 @@ public final class BlueMapTowny extends JavaPlugin {
                         seq += 1;
                     }
                     Optional<Location> spawn = Optional.ofNullable(town.getSpawnOrNull());
+                    if (this.config.getBoolean("style.outpost-icon-enabled", false)) {
+                        int i = 0;
+                        for (Location outpost : town.getAllOutpostSpawns()) {
+                            i++;
+                            POIMarker iconMarker = new POIMarker.Builder()
+                                    .label(townName + " Outpost " + i)
+                                    .detail(townDetails)
+                                    .icon(this.config.getString("style.outpost-icon"), this.config.getInt("style.outpost-icon-anchor-x", 8), this.config.getInt("style.outpost-icon-anchor-y", 8))
+                                    .styleClasses("towny-icon")
+                                    .position(outpost.getX(), outpost.getY(), outpost.getZ())
+                                    .build();
+                            markers.put("towny." + townName + ".outpost." + i + ".icon", iconMarker);
+                        }
+                    }
                     if (spawn.isPresent() && spawn.get().getWorld().equals(world)) {
                         if (this.config.getBoolean("style.ruined-icon-enabled") && town.isRuined()) {
                             POIMarker iconMarker = new POIMarker.Builder()
@@ -313,7 +327,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.war-icon"), this.config.getInt("style.war-icon-anchor-x", 8), this.config.getInt("style.war-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
-                                    .position(spawn.get().getX(), layerY, spawn.get().getZ())
+                                    .position(spawn.get().getX(), spawn.get().getY(), spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
                         } else if (this.config.getBoolean("style.capital-icon-enabled") && town.isCapital()) {
@@ -322,7 +336,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.capital-icon"), this.config.getInt("style.capital-icon-anchor-x", 8), this.config.getInt("style.capital-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
-                                    .position(spawn.get().getX(), layerY, spawn.get().getZ())
+                                    .position(spawn.get().getX(), spawn.get().getY(), spawn.get().getZ())
                                     .build();
 
                             markers.put("towny." + townName + ".icon", iconMarker);
@@ -332,7 +346,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.home-icon"), this.config.getInt("style.home-icon-anchor-x", 8), this.config.getInt("style.home-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
-                                    .position(spawn.get().getX(), layerY, spawn.get().getZ())
+                                    .position(spawn.get().getX(), spawn.get().getY(), spawn.get().getZ())
                                     .build();
                             markers.put("towny." + townName + ".icon", iconMarker);
                         }
@@ -345,7 +359,7 @@ public final class BlueMapTowny extends JavaPlugin {
                                 .detail(siegeDetails)
                                 .icon(this.config.getString("style.war-icon"), this.config.getInt("style.war-icon-anchor-x", 8), this.config.getInt("style.war-icon-anchor-y", 8))
                                 .styleClasses("towny-icon")
-                                .position(flagLoc.getX(), layerY, flagLoc.getZ())
+                                .position(flagLoc.getX(), flagLoc.getY(), flagLoc.getZ())
                                 .build();
                         markers.put("towny." + townName + ".siege", iconMarker);
                     }
