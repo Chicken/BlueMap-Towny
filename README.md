@@ -43,6 +43,9 @@ popup-siege: '<span style="font-size: 120%"><strong>Siege: %attacker% vs %defend
 # If you want claims with holes in them to show up as fully claimed if only the perimeter is claimed.
 # This means that the map will LIE about the actual claim status of the area!!!
 lie-about-holes: false
+# For servers with a lot of towns, filter smaller ones out of the map, -1 to disable filter
+min-town-blocks: -1
+min-residents: -1
 style:
   # Y-level to put area markers at, icons are at spawn positions
   y-level: 62

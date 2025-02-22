@@ -270,6 +270,10 @@ public final class BlueMapTowny extends JavaPlugin {
                 if (townyworld == null) continue;
                 TownyAPI.getInstance().getTowns().forEach((town) -> {
                     Vector2i[] chunks = town.getTownBlocks().stream().filter((tb) -> tb.getWorld().equals(townyworld)).map((tb) -> new Vector2i(tb.getX(), tb.getZ())).toArray(Vector2i[]::new);
+                    int minBlocks = this.config.getInt("min-town-blocks", -1);
+                    if (minBlocks != -1 && chunks.length < minBlocks) return;
+                    int minResidents = this.config.getInt("min-residents", -1);
+                    if (minResidents != -1 && town.getNumResidents() < minResidents) return;
                     int townSize = TownySettings.getTownBlockSize();
                     Vector2d cellSize = new Vector2d(townSize, townSize);
                     Collection<Cheese> cheeses = Cheese.createPlatterFromCells(cellSize, chunks);
