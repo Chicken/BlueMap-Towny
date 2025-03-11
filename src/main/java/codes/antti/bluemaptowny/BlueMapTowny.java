@@ -304,15 +304,17 @@ public final class BlueMapTowny extends JavaPlugin {
                     if (this.config.getBoolean("style.outpost-icon-enabled", false)) {
                         int i = 0;
                         for (Location outpost : town.getAllOutpostSpawns()) {
-                            i++;
-                            POIMarker iconMarker = new POIMarker.Builder()
-                                    .label(townName + " Outpost " + i)
-                                    .detail(townDetails)
-                                    .icon(this.config.getString("style.outpost-icon"), this.config.getInt("style.outpost-icon-anchor-x", 8), this.config.getInt("style.outpost-icon-anchor-y", 8))
-                                    .styleClasses("towny-icon")
-                                    .position(outpost.getX(), outpost.getY(), outpost.getZ())
-                                    .build();
-                            markers.put("towny." + townName + ".outpost." + i + ".icon", iconMarker);
+                            if (outpost.getWorld().equals(world)) {
+                                i++;
+                                POIMarker iconMarker = new POIMarker.Builder()
+                                        .label(townName + " Outpost " + i)
+                                        .detail(townDetails)
+                                        .icon(this.config.getString("style.outpost-icon"), this.config.getInt("style.outpost-icon-anchor-x", 8), this.config.getInt("style.outpost-icon-anchor-y", 8))
+                                        .styleClasses("towny-icon")
+                                        .position(outpost.getX(), outpost.getY(), outpost.getZ())
+                                        .build();
+                                markers.put("towny." + townName + ".outpost." + i + ".icon", iconMarker);
+                            }
                         }
                     }
                     if (spawn.isPresent() && spawn.get().getWorld().equals(world)) {
