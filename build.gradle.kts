@@ -17,6 +17,9 @@ repositories {
         setUrl ("https://oss.sonatype.org/content/groups/public/")
     }
     maven {
+        setUrl ("https://repo.bluecolored.de/releases")
+    }
+    maven {
         setUrl ("https://repo.glaremasters.me/repository/towny/")
     }
     maven {
@@ -33,11 +36,11 @@ dependencies {
     compileOnly ("com.github.BlueMap-Minecraft:BlueMapAPI:v2.4.0")
     compileOnly ("com.github.TownyAdvanced:SiegeWar:2.4.0")
     compileOnly ("us.dynmap:DynmapCoreAPI:3.4")
-    implementation ("com.github.TechnicJelle:UpdateCheckerJava:v2.1") {
+    implementation ("com.technicjelle:UpdateChecker:2.5.1") {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }
-    implementation ("com.github.TechnicJelle:BMUtils:v4.2") {
+    implementation ("com.technicjelle:BMUtils:4.3.1") {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )
     }

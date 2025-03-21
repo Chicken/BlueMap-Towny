@@ -1,6 +1,5 @@
 package codes.antti.bluemaptowny;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -49,13 +48,9 @@ public final class BlueMapTowny extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        try {
-            UpdateChecker updateChecker = new UpdateChecker("Chicken", "BlueMap-Towny", getDescription().getVersion());
-            updateChecker.check();
-            updateChecker.logUpdateMessage(getLogger());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        UpdateChecker updateChecker = new UpdateChecker("Chicken", "BlueMap-Towny", getDescription().getVersion());
+        updateChecker.check();
+        updateChecker.logUpdateMessage(getLogger());
         boolean isFolia = isFolia();
         BlueMapAPI.onEnable((api) -> {
             reloadConfig();
