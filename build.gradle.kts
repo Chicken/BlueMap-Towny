@@ -33,10 +33,6 @@ dependencies {
     compileOnly ("com.github.BlueMap-Minecraft:BlueMapAPI:v2.4.0")
     compileOnly ("com.github.TownyAdvanced:SiegeWar:2.4.0")
     compileOnly ("us.dynmap:DynmapCoreAPI:3.4")
-    implementation ("com.github.TechnicJelle:UpdateCheckerJava:v2.1") {
-        exclude ( group = "org.jetbrains", module = "annotations" )
-        exclude ( group = "org.intellij.lang", module = "annotations" )
-    }
     implementation ("com.github.TechnicJelle:BMUtils:v4.2") {
         exclude ( group = "org.jetbrains", module = "annotations" )
         exclude ( group = "org.intellij.lang", module = "annotations" )

@@ -37,7 +37,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
-import com.technicjelle.UpdateChecker;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.math.Color;
@@ -49,13 +48,6 @@ public final class BlueMapTowny extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        try {
-            UpdateChecker updateChecker = new UpdateChecker("Chicken", "BlueMap-Towny", getDescription().getVersion());
-            updateChecker.check();
-            updateChecker.logUpdateMessage(getLogger());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         boolean isFolia = isFolia();
         BlueMapAPI.onEnable((api) -> {
             reloadConfig();
