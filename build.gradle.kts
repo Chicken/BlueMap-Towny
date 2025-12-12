@@ -1,8 +1,6 @@
 plugins {
     java
     id ("com.github.johnrengelman.shadow") version "8.1.1"
-    id ("com.modrinth.minotaur") version "2.+"
-    id ("io.papermc.hangar-publish-plugin") version "0.0.5"
 }
 
 group = "codes.antti"
@@ -79,49 +77,4 @@ tasks.shadowJar {
     archiveClassifier.set("")
 
     relocate ("com.technicjelle", "codes.antti.bluemaptowny.shadow.jelle")
-}
-
-modrinth {
-    token.set(System.getenv("MODRINTH_TOKEN"))
-    projectId.set("Y6O9cRjl")
-    versionNumber.set(project.version as String)
-    changelog.set("View the changelog at [GitHub releases](https://github.com/Chicken/BlueMap-Towny/releases/tag/${project.version})")
-    uploadFile.set(tasks.findByName("shadowJar"))
-    loaders.addAll("spigot", "paper", "folia")
-    gameVersions.addAll(
-            "1.16.5",
-            "1.17", "1.17.1",
-            "1.18", "1.18.1", "1.18.2",
-            "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
-            "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4"
-    )
-}
-
-hangarPublish {
-    publications.register("plugin") {
-        version.set(project.version as String)
-        namespace("Chicken", "BlueMap-Towny")
-        channel.set("Release")
-        changelog.set("View the changelog at [GitHub releases](https://github.com/Chicken/BlueMap-Towny/releases/tag/${project.version})")
-        apiKey.set(System.getenv("HANGAR_TOKEN"))
-        platforms {
-            register(io.papermc.hangarpublishplugin.model.Platforms.PAPER) {
-                url.set("https://github.com/Chicken/BlueMap-Towny/releases/download/${project.version}/BlueMap-Towny-${project.version}.jar")
-                dependencies.hangar("Blue", "BlueMap")
-                dependencies.hangar("TownyAdvanced", "Towny")
-                platformVersions.set(listOf(
-                        "1.16.5",
-                        "1.17", "1.17.1",
-                        "1.18", "1.18.1", "1.18.2",
-                        "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
-                        "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4"
-                ))
-            }
-        }
-    }
-}
-
-tasks.register("publish") {
-    dependsOn("modrinth")
-    dependsOn("publishPluginPublicationToHangar")
 }
