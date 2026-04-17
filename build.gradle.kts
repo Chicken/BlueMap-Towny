@@ -1,15 +1,18 @@
 plugins {
     java
-    id ("com.github.johnrengelman.shadow") version "8.1.1"
+    id ("com.gradleup.shadow") version "9.3.2"
 }
 
 group = "codes.antti"
-version = "2.3.2"
+version = "2.4.0"
 
 repositories {
     mavenCentral()
     maven {
         setUrl ("https://repo.papermc.io/repository/maven-public/")
+    }
+    maven {
+        setUrl ("https://repo.bluecolored.de/releases")
     }
     maven {
         setUrl ("https://oss.sonatype.org/content/groups/public/")

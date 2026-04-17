@@ -83,7 +83,7 @@ public final class BlueMapTowny extends JavaPlugin {
             townMarkerSets.clear();
             for (World world : Bukkit.getWorlds()) {
                 api.getWorld(world).ifPresent((bmWorld) -> {
-                    MarkerSet set = new MarkerSet("Towns");
+                    MarkerSet set = new MarkerSet(this.config.getString("marker-set-name", "Towns"));
                     townMarkerSets.put(world.getUID(), set);
                     bmWorld.getMaps().forEach((map) -> {
                         map.getMarkerSets().put("towny", set);
@@ -250,6 +250,16 @@ public final class BlueMapTowny extends JavaPlugin {
         return t;
     }
 
+    private String getTownLabel(String townName) {
+        return this.config.getString("town-label", "%name%").replace("%name%", townName);
+    }
+
+    private String getOutpostLabel(String townName, int index) {
+        return this.config.getString("outpost-label", "%name% Outpost %index%")
+                .replace("%name%", townName)
+                .replace("%index%", String.valueOf(index));
+    }
+
     private void updateMarkers() {
         BlueMapAPI.getInstance().ifPresent((api) -> {
             for (World world : Bukkit.getWorlds()) {
@@ -278,7 +288,7 @@ public final class BlueMapTowny extends JavaPlugin {
                     int seq = 0;
                     for (Cheese cheese : cheeses) {
                         ShapeMarker.Builder chunkMarkerBuilder = new ShapeMarker.Builder()
-                                .label(townName)
+                                .label(getTownLabel(townName))
                                 .detail(townDetails)
                                 .lineColor(getLineColor(town))
                                 .lineWidth(this.config.getInt("style.border-width"))
@@ -299,7 +309,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             if (world.equals(outpost.getWorld())) {
                                 i++;
                                 POIMarker iconMarker = new POIMarker.Builder()
-                                        .label(townName + " Outpost " + i)
+                                        .label(getOutpostLabel(townName, i))
                                         .detail(townDetails)
                                         .icon(this.config.getString("style.outpost-icon"), this.config.getInt("style.outpost-icon-anchor-x", 8), this.config.getInt("style.outpost-icon-anchor-y", 8))
                                         .styleClasses("towny-icon")
@@ -312,7 +322,7 @@ public final class BlueMapTowny extends JavaPlugin {
                     if (spawn.isPresent() && world.equals(spawn.get().getWorld())) {
                         if (this.config.getBoolean("style.ruined-icon-enabled") && town.isRuined()) {
                             POIMarker iconMarker = new POIMarker.Builder()
-                                    .label(townName)
+                                    .label(getTownLabel(townName))
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.ruined-icon"), this.config.getInt("style.ruined-icon-anchor-x", 8), this.config.getInt("style.ruined-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
@@ -321,7 +331,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             markers.put("towny." + townName + ".icon", iconMarker);
                         } else if (this.config.getBoolean("style.war-icon-enabled") && town.hasActiveWar()) {
                             POIMarker iconMarker = new POIMarker.Builder()
-                                    .label(townName)
+                                    .label(getTownLabel(townName))
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.war-icon"), this.config.getInt("style.war-icon-anchor-x", 8), this.config.getInt("style.war-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
@@ -330,7 +340,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             markers.put("towny." + townName + ".icon", iconMarker);
                         } else if (this.config.getBoolean("style.capital-icon-enabled") && town.isCapital()) {
                             POIMarker iconMarker = new POIMarker.Builder()
-                                    .label(townName)
+                                    .label(getTownLabel(townName))
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.capital-icon"), this.config.getInt("style.capital-icon-anchor-x", 8), this.config.getInt("style.capital-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
@@ -340,7 +350,7 @@ public final class BlueMapTowny extends JavaPlugin {
                             markers.put("towny." + townName + ".icon", iconMarker);
                         } else if (this.config.getBoolean("style.home-icon-enabled")) {
                             POIMarker iconMarker = new POIMarker.Builder()
-                                    .label(townName)
+                                    .label(getTownLabel(townName))
                                     .detail(townDetails)
                                     .icon(this.config.getString("style.home-icon"), this.config.getInt("style.home-icon-anchor-x", 8), this.config.getInt("style.home-icon-anchor-y", 8))
                                     .styleClasses("towny-icon")
@@ -353,7 +363,7 @@ public final class BlueMapTowny extends JavaPlugin {
                     if (getServer().getPluginManager().isPluginEnabled("SiegeWar") && this.config.getBoolean("style.war-icon-enabled") && SiegeWarAPI.hasActiveSiege(town)) {
                         Location flagLoc = SiegeWarAPI.getSiege(town).get().getFlagLocation();
                         POIMarker iconMarker = new POIMarker.Builder()
-                                .label(townName)
+                                .label(getTownLabel(townName))
                                 .detail(siegeDetails)
                                 .icon(this.config.getString("style.war-icon"), this.config.getInt("style.war-icon-anchor-x", 8), this.config.getInt("style.war-icon-anchor-y", 8))
                                 .styleClasses("towny-icon")

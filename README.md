@@ -32,6 +32,12 @@ The plugin does not come with any default icons. I recommend just using
 
 # Seconds between checks for marker updates
 update-interval: 30
+# Display name of the marker set shown in BlueMap UI
+marker-set-name: Towns
+# Label for town markers, %name% is replaced with the town name
+town-label: '%name%'
+# Label for outpost markers, %name% is replaced with the town name, %index% with the outpost number
+outpost-label: '%name% Outpost %index%'
 # Set by /n set mapcolor
 dynamic-nation-colors: true
 # Set by /t set mapcolor
@@ -85,6 +91,15 @@ style:
   outpost-icon-anchor-x: 8
   outpost-icon-anchor-y: 8
 ```
+
+### Label placeholders
+
+`town-label` and `outpost-label` support the following placeholders:
+
+| Placeholder | Content                         |
+|-------------|---------------------------------|
+| `%name%`    | Town name                       |
+| `%index%`   | Outpost number (outpost-label only) |
 
 ### Popup placeholders
 
